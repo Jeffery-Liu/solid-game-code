@@ -1,5 +1,2 @@
 # Normalize text files to LF in the repo
 * text=auto eol=lf
-
-# The packaged skill is a zip — never apply text/EOL conversion
-*.skill binary

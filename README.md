@@ -24,7 +24,6 @@ references/
   unreal-cpp.md                       Actor Components, UInterface, Subsystems, GAS
   godot.md                            nodes, Resources, signals, autoload traps
   refactoring-playbook.md             engine-agnostic recipes + review template
-solid-game-code.skill                 packaged skill (zip of the above)
 ```
 
 The engine references load on demand — only when the code at hand is for that
@@ -46,15 +45,15 @@ For any other engine (Bevy, custom, etc.) it applies the principles directly.
 Requires [Claude Code](https://claude.com/claude-code) (CLI, desktop app, or IDE
 extension).
 
-1. Copy `SKILL.md` and the `references/` folder into your skills directory —
+1. Clone this repo (or download it via **Code → Download ZIP**, or from any
+   release's *Source code* archive).
+
+2. Copy `SKILL.md` and the `references/` folder into your skills directory —
    those two are all the skill needs:
    - Project-level: `.claude/skills/solid-game-code/`
    - User-level (all projects): `~/.claude/skills/solid-game-code/`
 
-   Or unpack the bundled `solid-game-code.skill` (it is a zip) into that same
-   location.
-
-2. That's the whole install — no build step, no dependencies. Claude Code
+3. That's the whole install — no build step, no dependencies. Claude Code
    auto-discovers `SKILL.md` on the next session.
 
 ## Try it
