@@ -30,7 +30,44 @@ solid-game-code.skill                 packaged skill (zip of the above)
 The engine references load on demand — only when the code at hand is for that
 engine — so a trigger doesn't pull all of it into context at once.
 
+## Supported engines
+
+Works with any engine — the principles and the refactoring playbook are
+engine-agnostic. Dedicated, idiomatic guidance ships for:
+
+- **Unity** (C#) — MonoBehaviour, ScriptableObject, DOTS
+- **Unreal** (C++ / Blueprints) — Actor Components, UInterface, Subsystems, GAS
+- **Godot** (4.x, GDScript / C#) — nodes, Resources, signals, autoload traps
+
+For any other engine (Bevy, custom, etc.) it applies the principles directly.
+
 ## Install
 
-Unpack `solid-game-code.skill` (a zip) into your skills directory, or point your
-skills loader at this folder directly.
+Requires [Claude Code](https://claude.com/claude-code) (CLI, desktop app, or IDE
+extension).
+
+1. Copy this folder into your skills directory:
+   - Project-level: `.claude/skills/solid-game-code/`
+   - User-level (all projects): `~/.claude/skills/solid-game-code/`
+
+   Or unpack the bundled `solid-game-code.skill` (it is a zip) into that same
+   location.
+
+2. That's the whole install — no build step, no dependencies. Claude Code
+   auto-discovers `SKILL.md` on the next session.
+
+## Try it
+
+Start Claude Code in a project and type any of these — the skill triggers on
+intent, you never have to name it:
+
+```
+add a dash ability to my player
+make an enemy that shoots at the player
+this PlayerController is a mess, clean it up
+review this class for coupling problems
+```
+
+You should see it split responsibilities, push tunables into data assets, and
+reach for the matching engine reference — while deliberately *not* abstracting
+hot paths or throwaway code.
