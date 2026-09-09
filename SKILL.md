@@ -110,7 +110,7 @@ Why it hurts: <the concrete future bug or friction, in game terms>
 Fix: <smallest change that removes the coupling>
 ```
 
-Order findings by cost of leaving them, and be explicit when something is fine as-is - "this switch has three cases and lives in one file; leave it" is a valid finding. `references/refactoring-playbook.md` has step-by-step recipes for the common transformations (extract component, replace type check with polymorphism, replace switch with data table, introduce a seam, split a fat interface) and a fuller report template.
+Order findings by cost of leaving them, and be explicit when something is fine as-is - "this switch has three cases and lives in one file; leave it" is a valid finding. `references/refactoring-playbook.md` has step-by-step recipes for the common transformations (extract component, replace type check with polymorphism, replace switch with data table, introduce a seam, split a fat interface, break a singleton dependency) and a fuller report template.
 
 ## Where NOT to apply this
 

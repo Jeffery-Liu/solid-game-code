@@ -46,7 +46,8 @@ For any other engine (Bevy, custom, etc.) it applies the principles directly.
 Requires [Claude Code](https://claude.com/claude-code) (CLI, desktop app, or IDE
 extension).
 
-1. Copy this folder into your skills directory:
+1. Copy `SKILL.md` and the `references/` folder into your skills directory —
+   those two are all the skill needs:
    - Project-level: `.claude/skills/solid-game-code/`
    - User-level (all projects): `~/.claude/skills/solid-game-code/`
 
