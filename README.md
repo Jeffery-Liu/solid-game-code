@@ -45,16 +45,32 @@ For any other engine (Bevy, custom, etc.) it applies the principles directly.
 Requires [Claude Code](https://claude.com/claude-code) (CLI, desktop app, or IDE
 extension).
 
-1. Clone this repo (or download it via **Code → Download ZIP**, or from any
-   release's *Source code* archive).
+**One command** — clone straight into your skills directory:
 
-2. Copy `SKILL.md` and the `references/` folder into your skills directory —
-   those two are all the skill needs:
-   - Project-level: `.claude/skills/solid-game-code/`
-   - User-level (all projects): `~/.claude/skills/solid-game-code/`
+```bash
+git clone https://github.com/Jeffery-Liu/solid-game-code.git ~/.claude/skills/solid-game-code
+```
 
-3. That's the whole install — no build step, no dependencies. Claude Code
-   auto-discovers `SKILL.md` on the next session.
+That's it. No build step, no dependencies. Claude Code picks up `SKILL.md` on
+your next session, and the skill is available in every project.
+
+To scope it to a single project instead, clone into that project's
+`.claude/skills/solid-game-code/`.
+
+To update later:
+
+```bash
+git -C ~/.claude/skills/solid-game-code pull
+```
+
+<details>
+<summary>Prefer not to use git?</summary>
+
+Download the repo (**Code → Download ZIP**), extract it, and copy `SKILL.md`
+and the `references/` folder into `~/.claude/skills/solid-game-code/`. Those
+two are all the skill needs.
+
+</details>
 
 ## Try it
 
