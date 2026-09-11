@@ -1,5 +1,7 @@
 # SOLID in Unity / C#
 
+Written for Unity 2022 LTS / Unity 6 idioms (MonoBehaviour, ScriptableObject, Entities 1.x). Not re-verified against a specific patch release - for API facts, prefer the project's own pinned engine docs.
+
 Contents: [Component split](#splitting-a-god-monobehaviour) · [Data-driven with ScriptableObjects](#data-driven-design-with-scriptableobjects) · [Interfaces & serialization](#interfaces-and-unitys-serializer) · [Dependency injection](#dependency-injection-without-a-framework) · [Events](#events-without-spaghetti) · [Type checks](#replacing-type-checks) · [Testing seams](#testing-seams) · [Performance](#performance-notes) · [DOTS](#dots--ecs)
 
 ## Splitting a god MonoBehaviour

@@ -41,7 +41,7 @@ Rule of thumb for gameplay code: if a class needs a section-comment header to be
 
 ### O - Open/Closed
 
-*Extendable without editing.* In games the cheapest and most effective form of OCP is **data-driven design**, not inheritance. Every constant a designer might want to tweak - damage, cooldown, projectile count, curve, VFX reference - belongs in a data asset (Unity `ScriptableObject`, Unreal `UDataAsset`/`UDataTable`, Godot `Resource`, or plain JSON/TOML), not in the class body.
+*Extendable without editing.* In games the cheapest and most effective form of OCP is **data-driven design**, not inheritance. Every constant a designer might want to tweak - damage, cooldown, projectile count, curve, VFX reference - belongs in data, not in the class body. "Data" is a ladder: a `const` table in a script (solo project, readable diffs) → typed data objects built in code → editor-authored asset files (Unity `ScriptableObject`, Unreal `UDataAsset`/`UDataTable`, Godot `Resource`) when a non-programmer edits them. Start at the lowest rung that fits. Derived constants (`rate = max / (days * hours)`) are formulas, not tunables - they stay with the rules code.
 
 The test: **adding the 30th enemy type should touch zero existing files** - one new data asset, and at most one small new class for genuinely new *behaviour*. If it means editing a `switch (enemyType)`, that switch is the bug. Replace it with a lookup table, a strategy object stored on the data asset, or polymorphic dispatch.
 
@@ -90,6 +90,8 @@ class CombatSystem {
 
 Wire everything once in a **composition root** (bootstrap scene, `GameInstance`, autoload, `main()`), not scattered at point of use. High-level gameplay rules should never `#include`/`using` a rendering, audio, or platform API directly.
 
+The cheapest inversion is a **parameter**, not an interface: `now`, `dt`, and an injected random generator make time- and chance-dependent rules deterministic with zero new types. Reach for an interface + adapter only when a whole subsystem (audio, save, network) needs swapping. In a single-script project the root object *is* the hidden singleton - every function reading its shared fields is the same coupling as `Manager.Instance`, and the fix is the same: pass what the function reads, return what it writes.
+
 ## Applying this while writing new code
 
 1. **Name the responsibilities first.** State them in one line each before writing the class. If the list has more than one entry, that is the file split.
@@ -110,7 +112,11 @@ Why it hurts: <the concrete future bug or friction, in game terms>
 Fix: <smallest change that removes the coupling>
 ```
 
-Order findings by cost of leaving them, and be explicit when something is fine as-is - "this switch has three cases and lives in one file; leave it" is a valid finding. `references/refactoring-playbook.md` has step-by-step recipes for the common transformations (extract component, replace type check with polymorphism, replace switch with data table, introduce a seam, split a fat interface, break a singleton dependency) and a fuller report template.
+Order findings by cost of leaving them, and be explicit when something is fine as-is - "this switch has three cases and lives in one file; leave it" is a valid finding. Name the *event* that would justify each deferred abstraction ("when the second enemy type is added"), not a date.
+
+On a god file (thousands of lines, every function reading the same fields) do not guess at the first cut: build the section → fields-written and function → purity tables first (playbook Recipe 0). **If the project has no tests, the first refactor step is extracting the pure formulas into static functions and landing one assertion file** (Recipe 7) - components come after there is something that fails when they break.
+
+`references/refactoring-playbook.md` has step-by-step recipes (read the god file, extract component, replace type check with polymorphism, replace switch with data table, introduce a seam, split a fat interface, break a singleton dependency, first test with no framework, split save/load without changing the format) and a fuller report template.
 
 ## Where NOT to apply this
 
@@ -120,7 +126,8 @@ These are not exceptions to be apologised for; they are the craft.
 - **Jam / prototype / throwaway code.** Coupling is cheap when the code has a two-week lifespan. Say so and move on.
 - **Engine-imposed shapes.** `MonoBehaviour`, `AActor`, and `Node` lifecycles are given. Work with them (see the engine references) rather than building a parallel framework to escape them.
 - **Small, stable things.** A three-case `switch` on a damage type that has not changed in a year does not need a strategy pattern.
-- **Solo-authored code with no test suite and no designer iteration.** Dial the ceremony down.
+- **Long but linear builder and draw routines.** A 130-line function that declares a settings window or paints a chest pixel by pixel is not a god class; splitting it into five 25-line functions does not read better. Line-count rules apply to logic, not to declarative construction.
+- **Solo-authored code with no test suite and no designer iteration.** Dial the ceremony down to: pure rules in plain classes, parameters instead of interfaces, one assertion file, signals only across real ownership boundaries. That is the whole list.
 
 If a request explicitly asks for the quick hack, give the quick hack, and add at most one line noting the debt.
 
@@ -134,16 +141,18 @@ AI-written game code drifts toward over-abstraction. Guard against:
 - Inheritance chains three or more deep where components would do.
 - Events everywhere, so no one can trace what happens when the player dies. Events are for crossing subsystem boundaries, not for talking to yourself.
 - Refactoring past what was asked. If the fix is one extracted class, do not deliver a new architecture.
+- Designing for the imagined 15th variant. An abstraction is forced into shape by the *second* real case; before that it is a guess. Two implementations validate a seam, three are not needed.
+- Rendering code that mutates simulation state (spawning particles or ticking timers inside a draw callback). It makes every offscreen render path back up and restore state by hand.
 
 Fewer, well-placed seams beat many shallow ones.
 
 ## Engine specifics
 
-Read the file matching the project's engine before writing engine-facing code - each covers the idiomatic way to get these properties in that engine, and the traps (Unity's inability to serialize plain interfaces, Unreal's `UInterface` boilerplate and subsystem-based injection, Godot's autoload and duck-typing pitfalls).
+Read the file matching the project's engine before writing engine-facing code - each covers the idiomatic way to get these properties in that engine, the traps (Unity's inability to serialize plain interfaces, Unreal's `UInterface` boilerplate and subsystem-based injection, Godot's autoload / class-cache / `.tres`-can-contain-scripts pitfalls), and how to run a first test without a framework. Each file states the engine version it was verified against; if the project pins a newer one, prefer the project's own engine reference docs for API facts.
 
 - `references/unity-csharp.md` - Unity / C# (MonoBehaviour, ScriptableObject, DOTS note)
 - `references/unreal-cpp.md` - Unreal / C++ and Blueprints (Actor Components, UInterface, Subsystems, GAS)
-- `references/godot.md` - Godot (nodes, scenes, Resources, signals, GDScript and C#)
+- `references/godot.md` - Godot 4.5+ (Node vs RefCounted vs Resource, `@abstract`, procedural-draw projects, signals, testing, GDScript traps)
 - `references/refactoring-playbook.md` - engine-agnostic refactoring recipes and the review report template
 
 For an engine not listed, apply the principles directly; the playbook is engine-agnostic.

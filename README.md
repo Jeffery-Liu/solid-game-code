@@ -22,8 +22,8 @@ SKILL.md                              main guidance (loaded on trigger)
 references/
   unity-csharp.md                     MonoBehaviour, ScriptableObject, DOTS
   unreal-cpp.md                       Actor Components, UInterface, Subsystems, GAS
-  godot.md                            nodes, Resources, signals, autoload traps
-  refactoring-playbook.md             engine-agnostic recipes + review template
+  godot.md                            Node vs RefCounted vs Resource, @abstract, procedural-draw, testing, traps
+  refactoring-playbook.md             9 engine-agnostic recipes (incl. first test, save/load split) + review template
 ```
 
 The engine references load on demand — only when the code at hand is for that
@@ -36,7 +36,7 @@ engine-agnostic. Dedicated, idiomatic guidance ships for:
 
 - **Unity** (C#) — MonoBehaviour, ScriptableObject, DOTS
 - **Unreal** (C++ / Blueprints) — Actor Components, UInterface, Subsystems, GAS
-- **Godot** (4.x, GDScript / C#) — nodes, Resources, signals, autoload traps
+- **Godot** (4.5+, GDScript / C#) — Node vs RefCounted vs Resource, `@abstract`, procedural-draw projects, zero-addon testing, GDScript traps
 
 For any other engine (Bevy, custom, etc.) it applies the principles directly.
 

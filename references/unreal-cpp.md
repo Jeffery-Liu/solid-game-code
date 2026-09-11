@@ -1,5 +1,7 @@
 # SOLID in Unreal Engine / C++
 
+Written for Unreal Engine 5.x idioms (Actor Components, UInterface, Subsystems, GAS). Not re-verified against a specific point release - for API facts, prefer the project's own pinned engine docs.
+
 Contents: [Actor Components](#actor-components-over-actor-inheritance) · [Data assets](#data-driven-with-data-assets-and-data-tables) · [UInterface](#uinterface-for-capability-interfaces) · [Subsystems as injection](#subsystems-the-engine-blessed-injection-point) · [Casting](#casting-is-the-lsp-smell) · [Delegates](#delegates-for-outward-communication) · [Gameplay Ability System](#gameplay-ability-system) · [Blueprints](#blueprint-boundaries) · [Performance](#performance-notes)
 
 ## Actor Components over Actor inheritance
